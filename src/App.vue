@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import UiInput from './components/input/UiInput.vue';
-import type { UiInputProps } from './components/input/types/UiInput.props';
+import UiInput from './components/UiInput/UiInput.vue';
+import type { UiInputProps } from './components/UiInput/types/UiInput.props';
 
 const uiInputRef = ref<HTMLElement | undefined>(undefined);
 const uiInputProps = ref<Omit<UiInputProps, 'modelValue'>>({

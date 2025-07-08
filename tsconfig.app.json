@@ -3,19 +3,24 @@
   "include": [
     "env.d.ts",
     "src/**/*",
+    "src/**/*.mdx",
     "src/**/*.vue"
   ],
   "exclude": [
     "src/**/__tests__/*"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "paths": {
       "@/*": [
         "./src/*"
       ],
+      "@stories/*": [
+        "./src/stories"
+      ],
       "@btn/*": [
-        "./src/components/button/*"
+        "./src/components/UiButton/*"
       ]
     }
   }
