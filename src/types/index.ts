@@ -1,4 +1,4 @@
-import type { ClassType } from './ClassType';
+import type { ClassType, BaseProps } from './BaseTypes';
 import type { DeepWritable } from './DeepWriteble';
 
-export type { ClassType, DeepWritable };
+export type { ClassType, BaseProps, DeepWritable };

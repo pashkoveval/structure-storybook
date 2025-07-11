@@ -13,4 +13,13 @@ export default defineConfig({
       '@stories': fileURLToPath(new URL('./src/stories', import.meta.url)),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @use "@/assets/_variables.scss" as *;
+        `,
+      },
+    },
+  },
 });

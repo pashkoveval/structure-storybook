@@ -3,15 +3,17 @@ import { ref } from 'vue';
 import { IconName } from '@/components/UiIcon/enums';
 import { ButtonType } from '../UiBtn/enums';
 import UiBtn from '../UiBtn/UiBtn.vue';
+import { Size } from '@/enums';
 
 defineOptions({ name: 'UiClearableBtn' });
 
-const icon = ref(IconName.Close);
-const type = ref(ButtonType.Icon);
+const icon = ref<IconName>(IconName.Close);
+const type = ref<ButtonType>(ButtonType.Icon);
+const size = ref<Size>(Size.Medium);
 </script>
 
 <template>
-  <UiBtn :icon="icon" :type="type" class="clearable" />
+  <UiBtn :icon="icon" :type="type" :size="size" class="clearable" />
 </template>
 
 <style scoped lang="scss">
@@ -33,6 +35,14 @@ const type = ref(ButtonType.Icon);
   background: var(--color-background-soft);
 
   cursor: pointer;
+
+  &.show {
+    opacity: 1;
+  }
+
+  &[disabled] {
+    cursor: text;
+  }
 
   @media (hover: hover) {
     &:hover {

@@ -1,6 +1,6 @@
 export enum IconName {
   // Основные действия
-  Close = 'close',
+  Close = 'mdi:close',
   Menu = 'menu',
   Search = 'search',
   Settings = 'settings',

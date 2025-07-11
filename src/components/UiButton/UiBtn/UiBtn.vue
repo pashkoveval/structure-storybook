@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { ButtonType } from './enums';
-import { IconName } from '@/components/UiIcon/enums';
+import { pick } from '@/helpers';
 import { Colors, Size } from '@/enums';
+import { ButtonType } from './enums';
 import type { UiBtnProps } from './types';
 import type { UiIconExpose, UiIconProps } from '@/components/UiIcon/types';
-import type { ClassType } from '@/types/ClassType';
+import type { ClassType } from '@/types/';
 import UiIcon from '@/components/UiIcon/UiIcon.vue';
-import { setConfig } from '@/components/UiIcon/helpers';
 
 defineOptions({ name: 'UiBtn' });
 const props = defineProps<UiBtnProps>();
@@ -29,28 +28,9 @@ const btnClass = computed<ClassType>(() => {
 });
 
 const isIconBtn = computed<boolean>(() => btnType.value === ButtonType.Icon);
-const iconBtnProps = computed<UiIconProps>(() => {
-  let iconConfig: UiIconProps['config'] = props.config;
-
-  if (!props.config) {
-    const iconProps: UiIconProps = {
-      icon: props.icon || IconName.Close,
-    };
-
-    (Object.keys(uiIconRef.value?.props || {}) as (keyof UiIconProps)[]).forEach((key) => {
-      iconProps[key] = props[key] as never;
-    });
-
-    iconConfig = setConfig(iconProps);
-  }
-
-  const iconPropsToReturn: UiIconProps = {
-    icon: props.icon || IconName.Close,
-    config: iconConfig,
-  };
-
-  return iconPropsToReturn;
-});
+const iconBtnProps = computed<UiIconProps>(
+  () => pick(props, 'icon', 'color', 'size') as UiIconProps,
+);
 </script>
 
 <template>

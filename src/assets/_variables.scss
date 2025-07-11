@@ -1,0 +1,20 @@
+:root {
+  color-scheme: light dark;
+}
+
+$color-base: light-dark(#121212, rgba(235, 235, 235, 0.64));
+$color-info: light-dark(#42a5f5, #1976d2);
+$color-warn: light-dark(#ffca28, #ffa000);
+$color-success: light-dark(#66bb6a, #388e3c);
+$color-error: light-dark(#ef5350, #d32f2f);
+
+$text: light-dark(#2c3e50, #a1a6ac);
+$text-2: light-dark(#18222c, #d8dce0);
+
+$color-bg: light-dark(#ffffff, #181818);
+$color-bg-2: light-dark(#f8f8f860, #22222260);
+$color-bg-3: light-dark(#f8f8f8, #222222);
+$color-bg-4: light-dark(#f2f2f2, #282828);
+
+$border: light-dark(rgba(84, 84, 84, 0.65), rgba(60, 60, 60, 0.4));
+$border-hover: light-dark(rgba(84, 84, 84, 0.48), rgba(60, 60, 60, 0.6));

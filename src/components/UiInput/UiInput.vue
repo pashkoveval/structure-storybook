@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, toRaw } from 'vue';
-import { makeId, pick } from '@/helpers';
+import { makeId, pick, debounce } from '@/helpers';
 import { UiInputTypes } from './enums';
 import { PROPS_BY_TYPE, PROPS_BY_TYPE_ALL } from './constants';
 import type { UiInputProps, UiInputEmits, UiInputPropsBinds } from './types';
@@ -13,6 +13,23 @@ const props = defineProps<UiInputProps>();
 const emits = defineEmits<UiInputEmits>();
 
 const uiInputRef = ref<HTMLElement | undefined>(undefined);
+
+const localValue = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(v: typeof props.modelValue) {
+    emits('update:modelValue', v);
+  },
+});
+
+const clear = () => {
+  const { disabled = false, readonly = false } = props || {};
+  if (!disabled && !readonly) {
+    localValue.value = null;
+    emits('clear', null);
+  }
+};
 
 const inputId = ref<string>(makeId(props.id || UiInputTypes.Text, props.attr));
 const inputType = ref<UiInputTypes>(props.type || UiInputTypes.Text);
@@ -36,22 +53,22 @@ const inputProps = computed<UiInputPropsBinds>(() => {
   return propsList;
 });
 
-const localValue = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(v: typeof props.modelValue) {
-    emits('update:modelValue', v);
-  },
-});
+const mouseOnMain = ref<boolean>(false);
 
-const clear = () => {
-  const { disabled = false, readonly = false } = props || {};
-  if (!disabled && !readonly) {
-    localValue.value = null;
-    emits('clear', null);
-  }
-};
+const mouseoverMain = debounce(() => (mouseOnMain.value = true), 150);
+const mouseleaveMain = debounce(() => (mouseOnMain.value = false), 150);
+
+const clearableClass = computed<ClassType>(() => {
+  return {
+    ['ui-input--clearable']: true,
+    ['ui-input--clearable_show show']: Boolean(localValue.value) && mouseOnMain.value,
+  };
+});
+const clearableShows = computed<boolean>(() =>
+  [props.clearable, [localValue.value, !props.disabled, !props.readonly].some(Boolean)].every(
+    Boolean,
+  ),
+);
 
 defineExpose({
   uiInputRef,
@@ -67,16 +84,17 @@ defineExpose({
     <label :for="inputId" class="ui-input--wrapper">
       <span v-if="props.label" class="ui-input--label">{{ props.label }}</span>
 
-      <div class="ui-input--main">
+      <div class="ui-input--main" @mouseover="mouseoverMain" @mouseleave="mouseleaveMain">
         <slot name="prepend" />
 
         <template v-if="readonly">
           <p class="ui-input--value">{{ localValue }}</p>
         </template>
+
         <template v-else>
           <input :id="inputId" v-model="localValue" v-bind="inputProps" class="ui-input--input" />
 
-          <UiClearableBtn v-if="props.clearable" class="ui-input--clearable" @click="clear" />
+          <UiClearableBtn v-if="clearableShows" :class="clearableClass" @click="clear" />
         </template>
 
         <slot name="append" />
@@ -101,13 +119,10 @@ defineExpose({
 
     @media (hover: hover) {
       &:hover {
-        .clearable {
-          opacity: 1;
-        }
-
         .ui-input--input {
           &:not(&:disabled) {
-            border: 1px solid var(--color-border-hover);
+            background: $color-bg-3;
+            border: 1px solid $border-hover;
           }
         }
       }
@@ -115,17 +130,17 @@ defineExpose({
   }
 
   &--label {
-    color: var(--color-text);
+    color: $text-2;
   }
 
   &--input {
     width: 100%;
     padding: 8px 10px;
 
-    background: var(--color-background-soft);
-    border: 1px solid var(--color-border);
+    background: $color-bg-2;
+    border: 1px solid $border;
     border-radius: 4px;
-    color: var(--color-heading);
+    color: $text;
 
     font-size: 16px;
 
@@ -143,15 +158,16 @@ defineExpose({
       width: 100%;
       padding: 2px 10px;
 
-      background: var(--color-background-soft);
-      border: 1px solid var(--color-border);
+      background: $color-bg-2;
+      border: 1px solid $border;
       border-radius: 4px;
 
       transition: all ease-in-out 0.2s;
       min-height: 36px;
     }
+
     .ui-input--value {
-      color: var(--color-heading);
+      color: $text;
       font-size: 16px;
     }
   }

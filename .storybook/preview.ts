@@ -1,4 +1,11 @@
 import type { Preview } from '@storybook/vue3-vite';
+import { setup } from '@storybook/vue3';
+import { Icon } from '@iconify/vue';
+
+setup((app) => {
+  // Регистрируем компонент иконки глобально для Storybook
+  app.component('IconifyIcon', Icon);
+});
 
 const preview: Preview = {
   parameters: {

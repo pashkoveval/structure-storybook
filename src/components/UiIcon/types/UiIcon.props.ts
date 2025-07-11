@@ -1,7 +1,9 @@
+import type { Color } from 'storybook/internal/theming';
 import type { IconName } from '../enums';
-import type { IconConfig } from './Config';
+import type { Size } from '@/enums';
 
-export interface UiIconProps extends Partial<IconConfig>{
+export interface UiIconProps {
   icon: IconName;
-  config?: IconConfig;
+  size?: Size;
+  color?: Color;
 }
