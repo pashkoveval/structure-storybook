@@ -1,3 +1,4 @@
+import type { Size } from '@/enums';
 import type { UiInputTypes } from '../enums';
 
 export interface BaseInputProps {
@@ -50,4 +51,6 @@ export type UiInputPropsBinds =
 
 export type UiInputProps = UiInputPropsBinds & {
   clearable?: boolean;
+  size?: Size;
+  error?: string;
 };
